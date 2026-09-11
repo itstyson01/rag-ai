@@ -1,0 +1,8 @@
+Retrieval Augmented Generation allows an AI system
+to retrieve information from external documents.
+
+The retrieved information is provided to the language
+model as context.
+
+This helps the model answer questions using information
+from the user's own documents.
