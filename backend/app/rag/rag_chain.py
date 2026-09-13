@@ -1,14 +1,16 @@
-from urllib import response
 from app.gemini.client import llm, extract_text
-from app.rag.retriever import retriever
-from app.gemini.client import llm
+from app.rag.retriever import get_retriever
 from app.memory.chat_memory import (
     add_message,
     get_history_text,
 )
 
 
-def ask_rag(question: str):
+def ask_rag(question: str, filename: str):
+
+    # Create a retriever that only searches
+    # chunks belonging to the uploaded PDF
+    retriever = get_retriever(filename)
 
     # Retrieve relevant document chunks
     results = retriever.invoke(question)
@@ -22,29 +24,29 @@ def ask_rag(question: str):
     history = get_history_text()
 
     prompt = f"""
-You are a helpful AI assistant.
+You are a helpful AI assistant answering questions about a specific uploaded document.
 
-Use the conversation history and relevant document context to answer the user's question.
+Use ONLY the relevant document context below to answer the user's question.
 
 Previous conversation:
 {history}
 
-Relevant document context:
+Document context:
 {context}
 
 Current question:
 {question}
 
-Formatting rules:
+Important rules:
+- Answer only from the provided document context.
+- Do not use information from other documents.
+- Do not use your general knowledge to fill missing information.
+- If the document context does not contain enough information, say that the information is not available in the document.
 - Give a clear and natural answer.
 - Use simple language.
-- Avoid unnecessary symbols or decorative characters.
-- Do not use excessive headings.
-- Do not use unnecessary markdown formatting.
-- Use bullet points only when they genuinely improve readability.
 - Do not repeat the user's question.
 - Keep the answer focused.
-- If the document context does not contain enough information, say so rather than inventing information.
+- Use bullet points only when they genuinely improve readability.
 """
 
     response = llm.invoke(prompt)

@@ -1,8 +1,6 @@
-from urllib import response
-
-from app.gemini.client import llm
 from app.gemini.client import llm, extract_text
 from app.web_search.web_search_chain import ask_web
+from app.rag.rag_chain import ask_rag
 
 
 def detect_mode(question: str):
@@ -29,7 +27,19 @@ def detect_mode(question: str):
     return "normal"
 
 
-def ask_ai(question: str):
+def ask_ai(
+    question: str,
+    use_rag: bool = False,
+    filename: str | None = None,
+):
+
+    # If a PDF was attached, use RAG
+    # with that specific PDF.
+    if use_rag and filename:
+        return ask_rag(
+            question,
+            filename,
+        )
 
     mode = detect_mode(question)
 

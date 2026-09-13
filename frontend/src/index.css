@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Global box sizing */
+* {
+  box-sizing: border-box;
+}
+
+/* Full height */
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+/* Main body */
+body {
+  background: #050816;
+  color: white;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* Hide scrollbar but keep scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
